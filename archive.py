@@ -1,31 +1,58 @@
+# sudo pip3 install xdelta3 py2exe
+
+from functools import reduce
+import os
+import tarfile
 import datetime
 import xdelta3
-import lzma
-import tarfile
+
+
+# Setup new backup file structure
+def new_backup_dir(backup_root):
+	month = datetime.datetime.today().month % 4
+	months = ['month1','month2','month3','month4']
+	month_folders = list(map(lambda month: backup_root + "/" + month, months))
+
+	weeks = ['week1','week2','week3','week4']
+	week_folders = []
+	for month in month_folders:
+		week_folders += list(map(lambda week: month + "/" + week, weeks))
+	
+	
+	if not os.path.exists(backup_root + "/day"):
+		os.makedirs(backup_root + "/day")
+	for month in month_folders:
+		if not os.path.exists(month):
+			os.makedirs(month)
+	for week in week_folders:
+		if not os.path.exists(week):
+			os.makedirs(week)
+	
+
 
 # returns a binary string of the delta
-
 def get_days(days_location):
 	days_data = []
 	for day_location in days_location:
-		with open(day_location, 'rb') as day_file:
-		#	days_data.append(lzma.decompress(day_file.read()))
+		if os.path.isfile(day_location):
+			with open(day_location, 'rb') as day_file:
+				days_data.append(day_file.read())
+		else:
+			days_data.append(b'')
 
 	return days_data
 
 # Calculate n + 1 and stomp on n
-def rotate_day(backup_root , backup_folders):
+def rotate_day(backup_root, backup_folders):
 	day = datetime.datetime.today().weekday()
 	days = ['mon','tues','wed','thurs','fri','sat','sun']
-	day_folders = map(lambda day: backup_root + "/day/" + day, days)
-	
-	# Get each day's data as a string, rotate about 'day'
-	days_data = get_days(days_folders)
-	days_data = days_data[day:] + days_data[:day]
+	days = days[day:] + days[:day]
+	days_files = list(map(lambda day: backup_root + "/day/" + day, days))
+	days_data = get_days(days_files)
 	
 	# Tar backup_folders togeather
 	day_file = backup_root + "/temp.tar" 
-	day_data = ""
+	day_data = b""
 	for folder in backup_folders:
 		with tarfile.open(day_file, 'w') as tar:
 			tar.add(folder)
@@ -33,17 +60,14 @@ def rotate_day(backup_root , backup_folders):
 		day_data = binary.read()
 
 	# Write changes to disk
-	with open(day_folders[day]) as new_root:
-		days_data[0] = xdelta3.decode(days_data[-1], days_data[0])
-                # lzma.compress(days_data[0])
-		new_root.write(days_data[0])
+	root_index = (day - 1) % len(days_files)
+	with open(days_files[root_index], "wb") as new_root:
+		root_data = xdelta3.decode(days_data[root_index - 1], days_data[root_index])
+		new_root.write(root_data)
 
-	last_day = reduce(xdelta3.decode, days_data[:-1])
-	with open(day_folders[(day - 1) % len(day_folders)], "w") as new_tail:
-                days_data[-1] = xdelta3.encode(last_day, day_data)
-                # lzma.compress(days_data[-1])
-		new_tail.write(days_data[-1])
-		
+	last_day = reduce(xdelta3.decode, days_data[1:-1])
+	with open(days_files[day], "wb") as new_tail:
+		new_tail.write(xdelta3.encode(last_day, day_data))
 
 
 
@@ -54,17 +78,14 @@ def rotate_archive(backup_root, backup_folders):
 	
 	month = datetime.datetime.today().month % 4
 	months = ['month1','month2','month3','month4']
-	months_folders= map(lambda month: backup_root + month, months)
+	month_folders = list(map(lambda month: backup_root + month, months))
 	
 	week = datetime.datetime.now().day // 7 % 4
 	weeks = ['week1','week2','week3','week4']
-	week_folders = map(lambda week: month_folders[month] + week, weeks)
+	week_folders = list(map(lambda week: month_folders[month] + week, weeks))
 	
 	day = datetime.datetime.now().day	
-	days = ['mon.tar','tues.tar','wed.tar','thurs.tar','fri.tar','sat.tar','sun.tar']
-	day_folders = map(lambda day: backup_root + "/day/" + day, days)
-	
-        rotate_day(backup_root, backup_folders)
+	rotate_day(backup_root, backup_folders)
 	
 	# Rotate weeks at the beginning of each week
 	if (day % 7 == 0):
@@ -80,8 +101,10 @@ def rotate_archive(backup_root, backup_folders):
 
 
 def main():
-	backup_folders = ['/home/administrator/Downloads/test_dir']
-	rotate_archive('/mnt/nas_backup', folder)
+	backup_folders = ['/home/administrator/test_backup']
+	backup_dir = '/home/administrator/backup'
+	#new_backup_dir(backup_dir)
+	rotate_archive(backup_dir, backup_folders)
 
 
 main()
