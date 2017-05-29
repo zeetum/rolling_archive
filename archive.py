@@ -60,7 +60,7 @@ def rotate_day(backup_root, backup_folders):
 		day_data = binary.read()
 
 	# Write changes to disk
-	root_index = (day - 1) % len(days_files)
+	root_index = (day + 1) % len(days_files)
 	with open(days_files[root_index], "wb") as new_root:
 		root_data = xdelta3.decode(days_data[root_index - 1], days_data[root_index])
 		new_root.write(root_data)
