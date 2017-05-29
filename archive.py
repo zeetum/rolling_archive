@@ -63,7 +63,7 @@ def rotate_day(backup_root, backup_folders):
                 days_data[1] = xdelta3.decode(days_data[0], days_data[1])
                 new_root.write(days_data[1])
 
-        # Write the new tail
+        # Write the new tail file
         last_day = reduce(xdelta3.decode, days_data[1:])
         with open(days_files[0], "wb") as new_tail:
                 new_tail.write(xdelta3.encode(last_day, day_data))
