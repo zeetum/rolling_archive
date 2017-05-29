@@ -12,15 +12,14 @@ def new_backup_dir(backup_root):
 	month = datetime.datetime.today().month % 4
 	months = ['month1','month2','month3','month4']
 	month_folders = list(map(lambda month: backup_root + "/" + month, months))
-
 	weeks = ['week1','week2','week3','week4']
 	week_folders = []
 	for month in month_folders:
 		week_folders += list(map(lambda week: month + "/" + week, weeks))
 	
-	
 	if not os.path.exists(backup_root + "/day"):
 		os.makedirs(backup_root + "/day")
+	
 	for month in month_folders:
 		if not os.path.exists(month):
 			os.makedirs(month)
@@ -28,7 +27,6 @@ def new_backup_dir(backup_root):
 		if not os.path.exists(week):
 			os.makedirs(week)
 	
-
 
 # returns a binary string of the delta
 def get_days(days_location):
@@ -41,6 +39,7 @@ def get_days(days_location):
 			days_data.append(b'')
 
 	return days_data
+
 
 # Calculate n + 1 and stomp on n
 def rotate_day(backup_root, backup_folders):
@@ -58,17 +57,16 @@ def rotate_day(backup_root, backup_folders):
 			tar.add(folder)
 	with open(day_file, "rb") as binary:
 		day_data = binary.read()
+		
+        # Write the new root file
+        with open(days_files[1], "wb") as new_root:
+                root_data = xdelta3.decode(days_data[0], days_data[1])
+                new_root.write(root_data)
 
-	# Write changes to disk
-	root_index = (day + 1) % len(days_files)
-	with open(days_files[root_index], "wb") as new_root:
-		root_data = xdelta3.decode(days_data[root_index - 1], days_data[root_index])
-		new_root.write(root_data)
-
-	last_day = reduce(xdelta3.decode, days_data[1:])
-	with open(days_files[day], "wb") as new_tail:
-		new_tail.write(xdelta3.encode(last_day, day_data))
-
+        # Write the new tail
+        last_day = reduce(xdelta3.decode, days_data[1:])
+        with open(days_files[0], "wb") as new_tail:
+                new_tail.write(xdelta3.encode(last_day, day_data))
 
 
 #backup_folders = a list of folders locations to back up
