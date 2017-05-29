@@ -41,7 +41,9 @@ def get_days(days_location):
 	return days_data
 
 
-# Calculate n + 1 and stomp on n
+# Tar and compress backup_folders
+# [1] = new root to be expanded with the diff of [0]
+# [0] = old root to be stomped with the diff the old tail and the new data
 def rotate_day(backup_root, backup_folders):
 	day = datetime.datetime.today().weekday()
 	days = ['mon','tues','wed','thurs','fri','sat','sun']
