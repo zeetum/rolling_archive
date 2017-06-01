@@ -1,4 +1,5 @@
 # sudo pip3 install xdelta3 py2exe
+# the filename of the backup should be the date it was created
 
 from functools import reduce
 import os
