@@ -1,6 +1,12 @@
 # sudo pip3 install xdelta3 py2exe
 # the filename of the backup should be the date it was created
 
+# Change structure to be:
+# month1 { day0 -> day1 -> ... -> day30}
+# month2 { day0 -> day1 -> ... -> day30}
+# month4 { day0 -> day10 -> ... -> day30}
+# month8 { day0 -> day10 -> ... -> day30}
+
 from functools import reduce
 import os
 import tarfile
