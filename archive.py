@@ -4,8 +4,8 @@
 # Change structure to be:
 # month1 { day0 -> day1 -> ... -> day30}
 # month2 { day0 -> day1 -> ... -> day30}
-# month4 { day0 -> day10 -> ... -> day30}
-# month8 { day0 -> day10 -> ... -> day30}
+# month4 { day0 -> day1 -> ... -> day30}
+# month8 { day0 -> day1 -> ... -> day30}
 
 from functools import reduce
 import os
