@@ -19,7 +19,7 @@ class Archive:
 		months = ['month1','month2','month3','month4']
 		self.month_folders = list(map(lambda month: backup_location + "/" + month, months))
 		__create_folders()
-		self.month_data = __get_days()
+		self.month_data = __load_days()
 
 
 	def __create_folders(self):
@@ -28,7 +28,7 @@ class Archive:
                         	os.makedirs(month)
 
 
-	def __get_days(self):
+	def __load_days(self):
 		days_data = []
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
@@ -53,6 +53,41 @@ class Archive:
 			self.month_data[day] = b''
 
 
+	# returns [day, month]
+	def __get_day_location(self, backup_date):
+	
+	        today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
+	        retrieve = datetime.datetime.strptime(str(retrieve_date), "%d-%m-%Y")
+	        days_ago = (today - retrieve).days
+	        if days_ago < 0:
+                        days_ago = 0
+
+	        months = [monthrange(datetime.date.today().year, datetime.date.today().month)[1],
+	        monthrange(datetime.date.today().year, datetime.date.today().month - 1)[1],
+                monthrange(datetime.date.today().year, datetime.date.today().month - 2)[1],
+                monthrange(datetime.date.today().year, datetime.date.today().month - 3)[1]]
+
+                month = 0
+	        today = today.day
+	        if today - days_ago <= 0:
+	                month += 1
+                        days_ago -= today
+	        else:
+                        return [today - days_ago, 0]
+        
+                while days_ago > 0 and month < 3:
+                        if days_ago - months[month] < 0:
+                                break
+ 
+                        days_ago -= months[month]
+                        month += 1
+	
+		if days_ago > months[3]:
+        		return [months[3], 3]
+		else:
+        		return [months[month] - days_ago, month]
+
+
 	def archive_day(self, backup_folders):
                 # Tar backup_folders togeather
                 temp_file = backup_location + "/temp.tar"
@@ -63,19 +98,20 @@ class Archive:
                 with open(temp_file, "rb") as binary:
                         day_data = binary.read()
                 with open(temp_file, 'w'):
-                        pass
+                	pass
 
         
+                # Write to disk
                 # Write to disk
 		day_file = month_folders[month] + "/" + str(day)
                 if day == 0:
 			__clear_month()
-			month_data[day] = day_data
+			self.month_data[day] = day_data
 			with open(day_file, "wb") as f:
 				f.write(month_data[day])
 			
                 else:
 			last_day = reduce(xdelta3.decode, month_data[:day])
-			month_data[day] = xdelta3.encode(last_day, day_data)
+			self.month_data[day] = xdelta3.encode(last_day, day_data)
 			with open(day_file, "wb") as f:
 				f.write(month_data[day])
