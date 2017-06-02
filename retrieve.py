@@ -12,9 +12,9 @@ def get_day_and_month(retrieve_date):
                 days_ago = 0
 
         months = [monthrange(datetime.date.today().year, datetime.date.today().month)[1],
-        monthrange(datetime.date.today().year, datetime.date.today().month -1)[1],
-        monthrange(datetime.date.today().year, datetime.date.today().month -2)[1],
-        monthrange(datetime.date.today().year, datetime.date.today().month -3)[1]]
+        monthrange(datetime.date.today().year, datetime.date.today().month - 1)[1],
+        monthrange(datetime.date.today().year, datetime.date.today().month - 2)[1],
+        monthrange(datetime.date.today().year, datetime.date.today().month - 3)[1]]
 
         month = 0
         today = today.day
