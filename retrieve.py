@@ -3,7 +3,7 @@ import datetime
 from calendar import monthrange
 # Calculates the day and month to retrieve from
 # return: %d-%m
-def get_day_of_month(retrieve_date):
+def get_day_and_month(retrieve_date):
 
         today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
         retrieve = datetime.datetime.strptime(str(retrieve_date), "%Y-%m-%d")
@@ -38,4 +38,4 @@ def get_day_of_month(retrieve_date):
 
 
 
-print(get_day_of_month(sys.argv[1]))
+print(get_day_and_month(sys.argv[1]))
