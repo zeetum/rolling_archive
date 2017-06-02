@@ -8,10 +8,11 @@ import xdelta3
 class Archive:
 	day = datetime.datetime.today().day
 	month = datetime.datetime.today().month % 4
+	month_data = []
 
 	backup_location = ""
         month_folders = []
-	month_data = []
+
 
 
 	def __init__(self, backup_location):
