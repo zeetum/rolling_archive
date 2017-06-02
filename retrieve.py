@@ -1,12 +1,16 @@
 import sys
 import datetime
 from calendar import monthrange
+
+
 # Calculates the day and month to retrieve from
-# return: %d-%m
+# retrieve_date: day-month-year
+# e.g. 5-2-2017
+# return: [d, m]
 def get_day_and_month(retrieve_date):
 
         today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
-        retrieve = datetime.datetime.strptime(str(retrieve_date), "%Y-%m-%d")
+        retrieve = datetime.datetime.strptime(str(retrieve_date), "%d-%m-%Y")
         days_ago = (today - retrieve).days
         if days_ago < 0:
                 days_ago = 0
