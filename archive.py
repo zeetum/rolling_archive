@@ -70,9 +70,12 @@ class Archive:
 		day_file = month_folders[month] + "/" + str(day)
                 if day == 0:
 			__clear_month()
+			month_data[day] = day_data
 			with open(day_file, "wb") as f:
-				f.write(day_data)
+				f.write(month_data[day])
+			
                 else:
 			last_day = reduce(xdelta3.decode, month_data[:day])
+			month_data[day] = xdelta3.encode(last_day, day_data)
 			with open(day_file, "wb") as f:
-				f.write(xdelta3.encode(last_day, day_data))
+				f.write(month_data[day])
