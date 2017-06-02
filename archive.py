@@ -108,10 +108,10 @@ class Archive:
 			__clear_month()
 			self.month_data[day] = day_data
 			with open(day_file, "wb") as f:
-				f.write(month_data[day])
+				f.write(self.month_data[day])
 			
                 else:
 			last_day = reduce(xdelta3.decode, month_data[:day])
 			self.month_data[day] = xdelta3.encode(last_day, day_data)
 			with open(day_file, "wb") as f:
-				f.write(month_data[day])
+				f.write(self.month_data[day])
