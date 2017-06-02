@@ -55,15 +55,16 @@ class Archive:
 
 	def archive_day(self, backup_folders):
                 # Tar backup_folders togeather
-                day_file = backup_location + "/temp.tar"
+                temp_file = backup_location + "/temp.tar"
                 day_data = b""
                 for folder in backup_folders:
-                        with tarfile.open(day_file, 'w') as tar:
+                        with tarfile.open(temp_file, 'w') as tar:
                                 tar.add(folder)
-                with open(day_file, "rb") as binary:
+                with open(temp_file, "rb") as binary:
                         day_data = binary.read()
-                with open(day_file, 'w'):
-                	pass
+                with open(temp_file, 'w'):
+                        pass
+
         
                 # Write to disk
 		day_file = month_folders[month] + "/" + str(day)
