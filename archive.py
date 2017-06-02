@@ -47,7 +47,6 @@ class Archive:
 			day_file = month_folders[month] + "/" + str(day)
                         with open(day_file, 'w'):
                        		pass
-
 			self.month_data[day] = b''
 
 
