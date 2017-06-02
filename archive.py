@@ -21,13 +21,15 @@ class Archive:
 		__create_folders()
 		__load_month()
 
-
+	
+	# Creates the folder structure or does nothing if it already exists
 	def __create_folders(self):
 		for month in month_folders:
                 	if not os.path.exists(month):
                         	os.makedirs(month)
 
-
+				
+	# Loads current month from file
 	def __load_month(self):
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
@@ -39,7 +41,8 @@ class Archive:
                         else:
                                 self.month_data.append(b'')
 
-
+				
+	# Clears current month and flushes the file
 	def __clear_month(self):
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
@@ -50,7 +53,7 @@ class Archive:
 			self.month_data[day] = b''
 
 
-	# returns [day, month]
+	# Returns the [day, month] to retrieve from backup
 	def __get_day_location(self, backup_date):
 	
 	        today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
@@ -85,6 +88,7 @@ class Archive:
         		return [months[month] - days_ago, month]
 
 
+	# Writes the backup_folders to the current day
 	def archive_day(self, backup_folders):
                 # Tar backup_folders togeather
                 temp_file = backup_location + "/temp.tar"
