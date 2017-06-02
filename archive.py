@@ -42,7 +42,7 @@ class Archive:
                 return days_data
 
 
-	def clear_month(self):
+	def __clear_month(self):
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
 
@@ -69,7 +69,7 @@ class Archive:
                 # Write to disk
 		day_file = month_folders[month] + "/" + str(day)
                 if day == 0:
-			clear_month()
+			__clear_month()
 			with open(day_file, "wb") as f:
 				f.write(day_data)
                 else:
