@@ -1,120 +1,77 @@
-# sudo pip3 install xdelta3 py2exe
-
-
-# The filename of the backup should be the date it was created
-# Remove delta rotation
-
-# Change structure to be:
-# month1 { day0 -> day1 -> ... -> day30}
-# month2 { day0 -> day1 -> ... -> day30}
-# month3 { day0 -> day1 -> ... -> day30}
-# month4 { day0 -> day1 -> ... -> day30}
-
 from functools import reduce
 import os
 import tarfile
 import datetime
+from calendar import monthrange
 import xdelta3
 
-
-# Setup new backup file structure
-def new_backup_dir(backup_root):
+class Archive:
+	day = datetime.datetime.today().day
 	month = datetime.datetime.today().month % 4
-	months = ['month1','month2','month3','month4']
-	month_folders = list(map(lambda month: backup_root + "/" + month, months))
-	weeks = ['week1','week2','week3','week4']
-	week_folders = []
-	for month in month_folders:
-		week_folders += list(map(lambda week: month + "/" + week, weeks))
-	
-	if not os.path.exists(backup_root + "/day"):
-		os.makedirs(backup_root + "/day")
-	
-	for month in month_folders:
-		if not os.path.exists(month):
-			os.makedirs(month)
-	for week in week_folders:
-		if not os.path.exists(week):
-			os.makedirs(week)
-	
 
-# returns a binary string of the delta
-def get_days(days_location):
-	days_data = []
-	for day_location in days_location:
-		if os.path.isfile(day_location):
-			with open(day_location, 'rb') as day_file:
-				days_data.append(day_file.read())
-		else:
-			days_data.append(b'')
-
-	return days_data
+	backup_location = ""
+        month_folders = []
+	month_data = []
 
 
-# Tar and compress backup_folders
-# [1] = new root to be expanded with the diff of [0]
-# [0] = old root to be stomped with the diff the old tail and the new data
-def rotate_day(backup_root, backup_folders):
-	day = datetime.datetime.today().weekday()
-	days = ['mon','tues','wed','thurs','fri','sat','sun']
-	days = days[day:] + days[:day]
-	days_files = list(map(lambda day: backup_root + "/day/" + day, days))
-	days_data = get_days(days_files)
-	
-	# Tar backup_folders togeather
-	day_file = backup_root + "/temp.tar" 
-	day_data = b""
-	for folder in backup_folders:
-		with tarfile.open(day_file, 'w') as tar:
-			tar.add(folder)
-	with open(day_file, "rb") as binary:
-		day_data = binary.read()
-		
-        # Write the new root file
-        with open(days_files[1], "wb") as new_root:
-                days_data[1] = xdelta3.decode(days_data[0], days_data[1])
-                new_root.write(days_data[1])
-
-        # Write the new tail file
-        last_day = reduce(xdelta3.decode, days_data[1:])
-        with open(days_files[0], "wb") as new_tail:
-                new_tail.write(xdelta3.encode(last_day, day_data))
+	def __init__(self, backup_location):
+		self.backup_location = backup_location
+		months = ['month1','month2','month3','month4']
+		self.month_folders = list(map(lambda month: backup_location + "/" + month, months))
+		__create_folders()
+		self.month_data = __get_days()
 
 
-#backup_folders = a list of folders locations to back up
-#backup_location = the directory you'd like to backup to
-def rotate_archive(backup_root, backup_folders): 
-	
-	
-	month = datetime.datetime.today().month % 4
-	months = ['month1','month2','month3','month4']
-	month_folders = list(map(lambda month: backup_root + month, months))
-	
-	week = datetime.datetime.now().day // 7 % 4
-	weeks = ['week1','week2','week3','week4']
-	week_folders = list(map(lambda week: month_folders[month] + week, weeks))
-	
-	day = datetime.datetime.now().day	
-	rotate_day(backup_root, backup_folders)
-	
-	# Rotate weeks at the beginning of each week
-	if (day % 7 == 0):
-		backup_file = week_folder[week]
-		with tarfile.open(backup_file, 'w') as tar:
-			for day in day_folders:
-				tar.add(day)
-	
-	# Trim all months other than current to have one week per month
-	if (day == 0):
-		backup_file = month_folder[month]
+	def __create_folders(self):
+		for month in month_folders:
+                	if not os.path.exists(month):
+                        	os.makedirs(month)
 
 
+	def __get_days(self):
+		days_data = []
+		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
+                for day in range(days_in_month):
+			day_file = month_folders[month] + "/" + day
+                        if os.path.isfile(day_file):
+                                with open(day_file, 'rb') as f:
+                                        days_data.append(f.read())
+                        else:
+                                days_data.append(b'')
+ 
+                return days_data
 
-def main():
-	backup_folders = ['/home/administrator/test_backup']
-	backup_dir = '/home/administrator/backup'
-	#new_backup_dir(backup_dir)
-	rotate_archive(backup_dir, backup_folders)
+
+	def clear_month(self):
+		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
+                for day in range(days_in_month):
+
+			day_file = month_folders[month] + "/" + str(day)
+                        with open(day_file, 'w'):
+                       		pass
+
+			self.month_data[day] = b''
 
 
-main()
+	def archive_day(self, backup_folders):
+                # Tar backup_folders togeather
+                day_file = backup_location + "/temp.tar"
+                day_data = b""
+                for folder in backup_folders:
+                        with tarfile.open(day_file, 'w') as tar:
+                                tar.add(folder)
+                with open(day_file, "rb") as binary:
+                        day_data = binary.read()
+                with open(day_file, 'w'):
+                	pass
+        
+                # Write to disk
+		day_file = month_folders[month] + "/" + str(day)
+                if day == 0:
+			clear_month()
+			with open(day_file, "wb") as f:
+				f.write(day_data)
+                else:
+			last_day = reduce(xdelta3.decode, month_data[:day])
+			with open(day_file, "wb") as f:
+				f.write(xdelta3.encode(last_day, day_data))
