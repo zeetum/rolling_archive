@@ -19,7 +19,7 @@ class Archive:
 		months = ['month1','month2','month3','month4']
 		self.month_folders = list(map(lambda month: backup_location + "/" + month, months))
 		__create_folders()
-		self.month_data = __load_days()
+		__load_days()
 
 
 	def __create_folders(self):
@@ -38,8 +38,7 @@ class Archive:
                                         days_data.append(f.read())
                         else:
                                 days_data.append(b'')
- 
-                return days_data
+		 self.month_data = days_data
 
 
 	def __clear_month(self):
