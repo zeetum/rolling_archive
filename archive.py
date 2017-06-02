@@ -19,7 +19,7 @@ class Archive:
 		months = ['month1','month2','month3','month4']
 		self.month_folders = list(map(lambda month: backup_location + "/" + month, months))
 		__create_folders()
-		__load_days()
+		__load_month()
 
 
 	def __create_folders(self):
@@ -28,17 +28,15 @@ class Archive:
                         	os.makedirs(month)
 
 
-	def __load_days(self):
-		days_data = []
+	def __load_month(self):
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
 			day_file = month_folders[month] + "/" + day
                         if os.path.isfile(day_file):
                                 with open(day_file, 'rb') as f:
-                                        days_data.append(f.read())
+                                        self.month_data.append(f.read())
                         else:
-                                days_data.append(b'')
-		 self.month_data = days_data
+                                self.month_data.append(b'')
 
 
 	def __clear_month(self):
