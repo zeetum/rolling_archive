@@ -73,7 +73,7 @@ class Archive:
 	                month += 1
                         days_ago -= today
 	        else:
-                        return [today - days_ago, 0]
+                        return (today - days_ago, 0)
         
                 while days_ago > 0 and month < 3:
                         if days_ago - months[month] < 0:
@@ -83,9 +83,9 @@ class Archive:
                         month += 1
 	
 		if days_ago > months[3]:
-        		return [months[3], 3]
+        		return (months[3], 3)
 		else:
-        		return [months[month] - days_ago, month]
+        		return (months[month] - days_ago, month)
 
 	
 	
