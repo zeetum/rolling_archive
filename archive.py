@@ -13,7 +13,6 @@ class Archive:
         month_folders = []
 
 
-
 	def __init__(self, backup_location):
 		self.backup_location = backup_location
 		months = ['month1','month2','month3','month4']
