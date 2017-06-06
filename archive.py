@@ -52,7 +52,6 @@ class Archive:
 
 	# Returns the (day, month) to retrieve from backup
 	def __get_day_location(self, backup_date):
-	
 	        today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
 	        retrieve = datetime.datetime.strptime(str(backup_date), "%d-%m-%Y")
 	        days_ago = (today - retrieve).days
@@ -87,7 +86,6 @@ class Archive:
 	
 	# Writes the file associated with backup_date to restore_file_location 
 	def retrieve_day(self, restore_file_location, backup_date):
-		
 		(day, month) = __get_day_location(self, backup_date)
 		month_data = __get_month(month)
 		day_data = reduce(xdelta3.decode, month_data[:++day])
