@@ -92,10 +92,11 @@ class Archive:
 	def retrieve_day(self, restore_file_location, backup_date):
 		
 		(day, month) = __get_day_location(self, backup_date)
-		retrieve_file = month_folders[month] + '/' + day
-				
+		month_data = __get_month(month)
+		
+		day_data = reduce(xdelta3.decode, month_data[:day]
 		with open(restore_file_location, 'wb') as f:
-			f.write(
+			f.write(day_data)
 		
 		
 	# Writes the backup_folders to the current day
