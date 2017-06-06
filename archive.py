@@ -58,7 +58,7 @@ class Archive:
 	def __get_day_location(self, backup_date):
 	
 	        today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
-	        retrieve = datetime.datetime.strptime(str(retrieve_date), "%d-%m-%Y")
+	        retrieve = datetime.datetime.strptime(str(backup_date), "%d-%m-%Y")
 	        days_ago = (today - retrieve).days
 	        if days_ago < 0:
                         days_ago = 0
