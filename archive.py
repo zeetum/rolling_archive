@@ -8,7 +8,6 @@ import xdelta3
 class Archive:
 	day = datetime.datetime.today().day
 	month = datetime.datetime.today().month % 4
-	month_data = []
 
 	backup_location = ""
         month_folders = []
@@ -20,7 +19,6 @@ class Archive:
 		months = ['month1','month2','month3','month4']
 		self.month_folders = list(map(lambda month: backup_location + "/" + month, months))
 		__create_folders()
-		__load_month()
 
 	
 	# Creates the folder structure or does nothing if it already exists
@@ -31,7 +29,8 @@ class Archive:
 
 				
 	# Loads current month from file
-	def __load_month(self):
+	def __get_month(self, month):
+		month_data = []
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
 			
@@ -41,17 +40,17 @@ class Archive:
                                         self.month_data.append(f.read())
                         else:
                                 self.month_data.append(b'')
+		return month_data
 
 				
 	# Clears current month and flushes the file
-	def __clear_month(self):
+	def __clear_month(self, month):
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
 			
 			day_file = month_folders[month] + "/" + str(day)
                         with open(day_file, 'w'):
                        		pass
-			self.month_data[day] = b''
 
 
 	# Returns the [day, month] to retrieve from backup
@@ -88,7 +87,17 @@ class Archive:
 		else:
         		return [months[month] - days_ago, month]
 
-
+	
+	
+	def retrieve_day(self, restore_file_location, backup_date):
+		
+		(day, month) = __get_day_location(self, backup_date)
+		retrieve_file = month_folders[month] + '/' + day
+				
+		with open(restore_file_location, 'wb') as f:
+			f.write(
+		
+		
 	# Writes the backup_folders to the current day
 	def archive_day(self, backup_folders):
                 # Tar backup_folders togeather
@@ -107,12 +116,10 @@ class Archive:
 		day_file = month_folders[month] + "/" + str(day)
                 if day == 0:
 			__clear_month()
-			self.month_data[day] = day_data
 			with open(day_file, "wb") as f:
-				f.write(self.month_data[day])
-			
+				f.write(day_data)
                 else:
+			month_data = __get_month(self, month):
 			last_day = reduce(xdelta3.decode, month_data[:day])
-			self.month_data[day] = xdelta3.encode(last_day, day_data)
 			with open(day_file, "wb") as f:
-				f.write(self.month_data[day])
+				f.write(xdelta3.encode(last_day, day_data))
