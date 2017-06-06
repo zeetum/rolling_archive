@@ -116,7 +116,7 @@ class Archive:
                 # Write to disk
 		day_file = month_folders[month] + "/" + str(day)
                 if day == 0:
-			__clear_month()
+			__clear_month(month)
 			with open(day_file, "wb") as f:
 				f.write(day_data)
                 else:
