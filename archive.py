@@ -6,8 +6,6 @@ from calendar import monthrange
 import xdelta3
 
 class Archive:
-	day = datetime.datetime.today().day
-	month = datetime.datetime.today().month % 4
 
 	backup_location = ""
         month_folders = []
@@ -100,6 +98,9 @@ class Archive:
 		
 	# Writes the backup_folders to the current day
 	def archive_day(self, backup_folders):
+		day = datetime.datetime.today().day
+		month = datetime.datetime.today().month % 4
+				  
                 # Tar backup_folders togeather
                 temp_file = backup_location + "/temp.tar"
                 day_data = b""
