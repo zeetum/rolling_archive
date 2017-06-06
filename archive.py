@@ -83,9 +83,9 @@ class Archive:
         		return (months[3], 3)
 		else:
         		return (months[month] - days_ago, month)
-
 	
 	
+	# Writes the file associated with backup_date to restore_file_location 
 	def retrieve_day(self, restore_file_location, backup_date):
 		
 		(day, month) = __get_day_location(self, backup_date)
