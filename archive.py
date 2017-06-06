@@ -25,7 +25,7 @@ class Archive:
                         	os.makedirs(month)
 
 				
-	# Returns a list of binary data for the month from file
+	# Returns a list of binary strings of data for the month from file
 	def __get_month(self, month):
 		month_data = []
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
