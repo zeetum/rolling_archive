@@ -53,7 +53,7 @@ class Archive:
                        		pass
 
 
-	# Returns the [day, month] to retrieve from backup
+	# Returns the (day, month) to retrieve from backup
 	def __get_day_location(self, backup_date):
 	
 	        today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
