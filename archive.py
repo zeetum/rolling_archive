@@ -20,7 +20,7 @@ class Archive:
 	
 	# Creates the folder structure or does nothing if it already exists
 	def __create_folders(self):
-		for month in month_folders:
+		for month in self.month_folders:
                 	if not os.path.exists(month):
                         	os.makedirs(month)
 
@@ -31,7 +31,7 @@ class Archive:
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
 			
-			day_file = month_folders[month] + "/" + day
+			day_file = self.month_folders[month] + "/" + day
                         if os.path.isfile(day_file):
                                 with open(day_file, 'rb') as f:
                                         self.month_data.append(f.read())
@@ -45,7 +45,7 @@ class Archive:
 		days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
 			
-			day_file = month_folders[month] + "/" + str(day)
+			day_file = self.month_folders[month] + "/" + str(day)
                         with open(day_file, 'w'):
                        		pass
 
