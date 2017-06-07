@@ -110,7 +110,6 @@ class Archive:
                 with open(temp_file, 'w'):
                 	pass
 		
-		
                 # Write to disk
 		day_file = month_folders[month] + "/" + str(day)
                 if day == 0:
