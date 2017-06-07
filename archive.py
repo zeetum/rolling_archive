@@ -88,7 +88,7 @@ class Archive:
 	def retrieve_day(self, restore_file_location, backup_date):
 		(day, month) = __get_day_location(self, backup_date)
 		month_data = __get_month(month)
-		day_data = reduce(xdelta3.decode, month_data[:day + 1])
+		day_data = reduce(xdelta3.decode, month_data[:day])
 				  
 		with open(restore_file_location, 'wb') as f:
 			f.write(day_data)
