@@ -129,4 +129,4 @@ class Archive:
 
 archive = Archive("/home/dunadmin/test_backup")
 archive.archive_day("/home/dunadmin/Downloads")
-archive.retrieve_day("/home/dunadmin/test_restore")
+archive.retrieve_day("/home/dunadmin/test_restore", "01-02-2017")
