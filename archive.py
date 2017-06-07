@@ -1,3 +1,5 @@
+# sudo pip3 install py2exe xdelta3
+
 from functools import reduce
 import os
 import tarfile
