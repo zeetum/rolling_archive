@@ -20,6 +20,9 @@ class Archive:
 	
 	# Creates the folder structure or does nothing if it already exists
 	def __create_folders(self):
+		if not os.path.exists(self.backup_location):
+                        os.makedirs(self.backup_location)
+
 		for month in self.month_folders:
                 	if not os.path.exists(month):
                         	os.makedirs(month)
@@ -100,7 +103,7 @@ class Archive:
 		month = datetime.datetime.today().month % 4
 				  
                 # Tar backup_folders togeather
-                temp_file = backup_location + "/temp.tar"
+                temp_file = self.backup_location + "/temp.tar"
                 day_data = b""
                 for folder in backup_folders:
                         with tarfile.open(temp_file, 'w') as tar:
@@ -121,3 +124,5 @@ class Archive:
 			last_day = reduce(xdelta3.decode, month_data[:day])
 			with open(day_file, "wb") as f:
 				f.write(xdelta3.encode(last_day, day_data))
+
+archive = Archive("/home/dunadmin/
