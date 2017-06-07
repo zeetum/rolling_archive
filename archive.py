@@ -8,8 +8,7 @@ import xdelta3
 class Archive:
 
 	backup_location = ""
-        month_folders = []
-
+	month_folders = []
 
 	def __init__(self, backup_location):
 		self.backup_location = backup_location
