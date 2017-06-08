@@ -87,7 +87,8 @@ class Archive:
                 	return (months[month] - days_ago, month)
                 	
                 	
-        # Writes the file associated with backup_date to restore_file_location 
+        # Writes the file associated with backup_date to restore_file_location
+	# https://stackoverflow.com/questions/8259769/extract-all-files-with-directory-path-in-given-directory
 	def retrieve_day(self, restore_file_location, backup_date):
 		(day, month) = __get_day_location(self, backup_date)
 		month_data = __get_month(month)
