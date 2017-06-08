@@ -88,7 +88,7 @@ class Archive:
                 	
                 	
         # Writes the file associated with backup_date to restore_file_location
-	def retrieve_day(self, restore_file_location, backup_date):
+	def retrieve_day(self, restore_location, backup_date):
 		(day, month) = __get_day_location(self, backup_date)
 		month_data = __get_month(month)
 		day_data = reduce(xdelta3.decode, month_data[:day])
@@ -100,7 +100,7 @@ class Archive:
 
 		# Then uncompress it to restore_file_location
 		with tarfile.open(temp_file, "r:xz") as tar:
-			tar.extractall(path=restore_file_location)
+			tar.extractall(path=restore_location)
 		os.remove(temp_file)
 		
 		
