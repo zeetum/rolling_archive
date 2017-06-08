@@ -12,9 +12,8 @@ class Archive:
 	backup_location = ""
 	month_folders = []
 
-	def __init__(self, backup_location):
+	def __init__(self, backup_location, months):
 		self.backup_location = backup_location
-		months = ['month1','month2','month3','month4']
 		self.month_folders = list(map(lambda month: backup_location + "/" + month, months))
 		__create_folders()
 
@@ -127,6 +126,6 @@ class Archive:
                         with open(day_file, "wb") as f:
                                 f.write(xdelta3.encode(last_day, day_data))
 
-archive = Archive("/home/dunadmin/test_backup")
+archive = Archive("/home/dunadmin/test_backup", ['month1','month2','month3','month4'])
 archive.archive_day(["/home/dunadmin/Downloads"])
 archive.retrieve_day("/home/dunadmin/test_restore", "01-02-2017")
