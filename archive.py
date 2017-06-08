@@ -88,14 +88,17 @@ class Archive:
                 	
                 	
         # Writes the file associated with backup_date to restore_file_location
-	# https://stackoverflow.com/questions/8259769/extract-all-files-with-directory-path-in-given-directory
 	def retrieve_day(self, restore_file_location, backup_date):
 		(day, month) = __get_day_location(self, backup_date)
 		month_data = __get_month(month)
 		day_data = reduce(xdelta3.decode, month_data[:day])
-				  
-		with open(restore_file_location, 'wb') as f:
-			f.write(day_data)
+		
+		temp_file = self.backup_location + "/temp.tar"
+		with open(temp_file, "wb") as f:
+                	f.write(day_data)
+		with tarfile.open(temp_file, "r:xz") as tar:
+			tar.extractall(path=restore_file_location)
+		os.remove(temp_file)
 		
 		
 	# Writes the backup_folders to the current day
