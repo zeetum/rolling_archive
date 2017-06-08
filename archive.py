@@ -31,8 +31,8 @@ class Archive:
 	# Returns a list of binary strings of data for the month from file
 	def __get_month(self, month):
                 month_data = []
+		
                 days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
-                
                 for day in range(days_in_month):
                         day_file = self.month_folders[month] + "/" + day
                         if os.path.isfile(day_file):
