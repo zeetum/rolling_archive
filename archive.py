@@ -93,7 +93,8 @@ class Archive:
 		month_data = __get_month(month)
 		day_data = reduce(xdelta3.decode, month_data[:day])
 		
-		temp_file = self.backup_location + "/temp.tar"
+		# Write the days data to a temp file and then uncompress it to restore_file_location
+		temp_file = self.backup_location + "/temp.tar.xz"
 		with open(temp_file, "wb") as f:
                 	f.write(day_data)
 		with tarfile.open(temp_file, "r:xz") as tar:
@@ -107,7 +108,7 @@ class Archive:
                 month = datetime.datetime.today().month % 4
                 		  
                 # Tar backup_folders togeather
-                temp_file = self.backup_location + "/temp.tar"
+                temp_file = self.backup_location + "/temp.tar.xz"
                 day_data = b""
                 for folder in backup_folders:
                         with tarfile.open(temp_file, "x:xz") as tar:
