@@ -45,7 +45,7 @@ class Archive:
                 return month_data
 
 				
-	# Clears current month and flushes the file
+	# Clears the month and flushes the file
 	def __clear_month(self, month):
                 days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
