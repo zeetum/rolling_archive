@@ -93,10 +93,12 @@ class Archive:
 		month_data = __get_month(month)
 		day_data = reduce(xdelta3.decode, month_data[:day])
 		
-		# Write the days data to a temp file and then uncompress it to restore_file_location
+		# Write the days data to a temp file
 		temp_file = self.backup_location + "/temp.tar.xz"
 		with open(temp_file, "wb") as f:
                 	f.write(day_data)
+
+		# Then uncompress it to restore_file_location
 		with tarfile.open(temp_file, "r:xz") as tar:
 			tar.extractall(path=restore_file_location)
 		os.remove(temp_file)
