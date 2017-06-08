@@ -48,9 +48,9 @@ class Archive:
 	def __clear_month(self, month):
                 days_in_month = monthrange(datetime.date.today().year, datetime.date.today().month)[1]
                 for day in range(days_in_month):
-			
                         day_file = self.month_folders[month] + "/" + str(day)
-                        os.remove(day_file)
+			if os.path.isfile(day_file):
+                        	os.remove(day_file)
 
 
 	# Returns the (day, month) to retrieve from backup
