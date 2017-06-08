@@ -112,8 +112,8 @@ class Archive:
                 # Tar backup_folders togeather
                 temp_file = self.backup_location + "/temp.tar.xz"
                 day_data = b""
-                for folder in backup_folders:
-                        with tarfile.open(temp_file, "x:xz") as tar:
+		with tarfile.open(temp_file, "x:xz") as tar:
+                	for folder in backup_folders:
                                 tar.add(folder)
                 with open(temp_file, "rb") as binary:
                         day_data = binary.read()
