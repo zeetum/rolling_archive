@@ -98,7 +98,7 @@ class Archive:
 		with open(temp_file, "wb") as f:
                 	f.write(day_data)
 
-		# Then uncompress it to restore_file_location
+		# Then uncompress it to restore_location
 		with tarfile.open(temp_file, "r:xz") as tar:
 			tar.extractall(path=restore_location)
 		os.remove(temp_file)
