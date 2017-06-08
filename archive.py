@@ -50,8 +50,7 @@ class Archive:
                 for day in range(days_in_month):
 			
                         day_file = self.month_folders[month] + "/" + str(day)
-                        with open(day_file, 'w'):
-                       		pass
+                        os.remove(day_file)
 
 
 	# Returns the (day, month) to retrieve from backup
@@ -107,12 +106,11 @@ class Archive:
                 temp_file = self.backup_location + "/temp.tar"
                 day_data = b""
                 for folder in backup_folders:
-                        with tarfile.open(temp_file, 'w') as tar:
+                        with tarfile.open(temp_file, "x:xz") as tar:
                                 tar.add(folder)
                 with open(temp_file, "rb") as binary:
                         day_data = binary.read()
-                with open(temp_file, 'w'):
-                	pass
+		os.remove(temp_file)
                 
                 # Write to disk
                 day_file = month_folders[month] + "/" + str(day)
