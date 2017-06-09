@@ -24,12 +24,10 @@ class Archive:
 
 
 	# 
-	def __get_data(self, days_ago):
+	def __get_data(self, retrieve_date):
                 backup_data = []
-		today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
-		start_day = (today - creation_day).day
 
-                for day in range(0, start_day - days_ago):
+                for day in range(0, (retrieve_date - creation_day).days):
                         day_file = self.backup_location + "/" + day
                         if os.path.isfile(day_file):
                                 with open(day_file, 'rb') as f:
@@ -42,13 +40,12 @@ class Archive:
 	
         # Writes the file associated with backup_date to restore_file_location
 	def retrieve_day(self, restore_location, retrieve_date):
-		today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
                 retrieve_date = datetime.datetime.strptime(str(retrieve_date), "%d-%m-%Y")
-		days_ago = (today - retrieve).days
-		if (days_ago > creation_date.days):
-			days_ago = creation_date.days
 		
-		backup_data = __get_data(days_ago)
+		if (retrieve_date < creation_date):
+			retrieve_date = creation_date
+		
+		backup_data = __get_data(retrieve_date)
 		day_data = reduce(xdelta3.decode, backup_data)
 		
 		# Write the days data to a temp file
