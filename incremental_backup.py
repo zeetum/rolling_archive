@@ -65,7 +65,7 @@ class Archive:
                 archive_day =  (today - creation_date).days
                 		  
                 # Tar backup_folders togeather
-                temp_file = self.backup_location + "/temp.tar.xz"
+                temp_file = self.backup_location + "/temp"
                 day_data = b""
 		with tarfile.open(temp_file, "x:xz") as tar:
                 	for folder in backup_folders:
