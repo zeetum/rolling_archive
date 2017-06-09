@@ -62,7 +62,6 @@ class Archive:
 	# Writes the backup_folders to the current day
 	def archive_day(self, backup_folders):
 		today = datetime.datetime.fromtimestamp(time.time()).strftime("%d-%m-%Y")
-                archive_day =  (today - creation_date).days
                 		  
                 # Tar backup_folders togeather
                 temp_file = self.backup_location + "/temp"
@@ -75,12 +74,13 @@ class Archive:
 		os.remove(temp_file)
                 
                 # Write to disk
+		archive_day = (self.creation_date - today).days
                 day_file = backup_location + "/" + str(archive_day)
-                if archive_day == 0:
+                if self.creation_date == today:
                 	with open(day_file, "wb") as f:
                 		f.write(day_data)
                 else:
-                        backup_data = __get_data(archive_day)
+                        backup_data = __get_data(today)
                         last_day = reduce(xdelta3.decode, backup_data)
                         with open(day_file, "wb") as f:
                                 f.write(xdelta3.encode(last_day, day_data))
