@@ -27,7 +27,7 @@ class Archive:
 	def __get_data(self, retrieve_date):
                 backup_data = []
 
-                for day in range(0, (retrieve_date - creation_day).days):
+                for day in range(0, (retrieve_date - self.creation_day).days):
                         day_file = self.backup_location + "/" + day
                         if os.path.isfile(day_file):
                                 with open(day_file, 'rb') as f:
