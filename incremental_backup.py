@@ -15,17 +15,21 @@ class Archive:
 		
 		if not os.path.exists(backup_location):
 			os.makedirs(backup_location)
-			with open(backup_location + "/creation_date") as time_file:
+			with open(backup_location + "/creation_date", "w") as time_file:
 				self.creation_date = datetime.datetime.fromtimestamp(time.time()).strftime("%d-%m-%Y")
 				time_file.write(self.creation_date)
 		else:
 			with open(backup_location + "/creation_date") as time_file:
-				self.creation_date = time_file.read()
-                	
+				self.creation_date = datetime.datetime.strptime(time_file.read(), "%d-%m-%Y")
+
+
+	# 
 	def __get_data(self, days_ago):
                 backup_data = []
-		
-                for day in range(days_ago):
+		today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
+		start_day = (today - creation_day).day
+
+                for day in range(0, start_day - days_ago):
                         day_file = self.backup_location + "/" + day
                         if os.path.isfile(day_file):
                                 with open(day_file, 'rb') as f:
@@ -33,7 +37,7 @@ class Archive:
                         else:
                                 self.backup_data.append(b'')
                 
-                return month_data
+                return backup_data
 	
 	
         # Writes the file associated with backup_date to restore_file_location
