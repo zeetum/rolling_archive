@@ -84,6 +84,6 @@ class Archive:
                         with open(day_file, "wb") as f:
                                 f.write(xdelta3.encode(last_day, day_data))
 
-archive = Archive("/home/dunadmin/test_backup", ['month1','month2','month3','month4'])
+archive = Archive("/home/dunadmin/test_backup")
 archive.archive_day(["/home/dunadmin/Downloads"])
 archive.retrieve_day("/home/dunadmin/test_restore", "01-02-2017")
