@@ -23,7 +23,7 @@ class Archive:
 				self.creation_date = datetime.datetime.strptime(time_file.read(), "%d-%m-%Y")
 
 
-	# 
+	# Returns an array of data from creation_date to retrieve_date
 	def __get_data(self, retrieve_date):
                 backup_data = []
 
