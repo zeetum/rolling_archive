@@ -41,8 +41,8 @@ class Archive:
 		today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
                 retrieve_date = datetime.datetime.strptime(str(retrieve_date), "%d-%m-%Y")
 		days_ago = (today - retrieve).days
-		if (days_ago > ):
-			days_ago = str(creation_date)
+		if (days_ago > creation_date.days):
+			days_ago = creation_date.days
 		
 		backup_data = __get_data(days_ago)
 		day_data = reduce(xdelta3.decode, backup_data)
@@ -79,7 +79,7 @@ class Archive:
                 	with open(day_file, "wb") as f:
                 		f.write(day_data)
                 else:
-                        backup_data = __get_data(days_ago)
+                        backup_data = __get_data(archive_day)
                         last_day = reduce(xdelta3.decode, backup_data)
                         with open(day_file, "wb") as f:
                                 f.write(xdelta3.encode(last_day, day_data))
