@@ -41,7 +41,7 @@ class Archive:
 		today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
                 retrieve_date = datetime.datetime.strptime(str(retrieve_date), "%d-%m-%Y")
 		days_ago = (today - retrieve).days
-		if (days_ago > (today - creation_date)):
+		if (days_ago > ):
 			days_ago = str(creation_date)
 		
 		backup_data = __get_data(days_ago)
@@ -60,8 +60,8 @@ class Archive:
 		
 	# Writes the backup_folders to the current day
 	def archive_day(self, backup_folders):
-                day = datetime.datetime.today().day
-                month = datetime.datetime.today().month % 4
+		today = datetime.datetime.fromtimestamp(time.time()).strftime("%d-%m-%Y")
+                archive_day =  (today - creation_date).days
                 		  
                 # Tar backup_folders togeather
                 temp_file = self.backup_location + "/temp.tar.xz"
@@ -74,14 +74,13 @@ class Archive:
 		os.remove(temp_file)
                 
                 # Write to disk
-                day_file = month_folders[month] + "/" + str(day)
-                if day == 0:
-                	__clear_month(month)
+                day_file = backup_location + "/" + str(archive_day)
+                if archive_day == 0:
                 	with open(day_file, "wb") as f:
                 		f.write(day_data)
                 else:
-                        month_data = __get_month(self, month)
-                        last_day = reduce(xdelta3.decode, month_data[:day])
+                        backup_data = __get_data(days_ago)
+                        last_day = reduce(xdelta3.decode, backup_data)
                         with open(day_file, "wb") as f:
                                 f.write(xdelta3.encode(last_day, day_data))
 
