@@ -30,36 +30,37 @@ class Archive:
 
 	# Returns an array of data from creation_date to retrieve_date
 	def __get_data(self, retrieval_date):
-                backup_data = []
+		backup_data = []
 		
 		# Set floor and ceiling
 		today = datetime.datetime.fromtimestamp(time.time())
 		if retrieval_date > today:
 			retrieval_date = today
-		if retrieve_date < self.creation_date:
-			retrieve_date = self.creation_date
+		if retrieval_date < self.creation_date:
+			retrieval_date = self.creation_date
 
 		# Read data from disk
 		day_index = (retrieval_date - self.creation_date).days
-                for day in range(0, day_index + 1):
-                        day_file = self.backup_location + "/" + str(day)
-                        if os.path.isfile(day_file):
-                                with open(day_file, 'rb') as f:
-                                        backup_data.append(f.read())
-                
-                return backup_data
+		print(day_index)
+		for day in range(0, day_index + 1):
+			day_file = self.backup_location + "/" + str(day)
+			if os.path.isfile(day_file):
+				with open(day_file, 'rb') as f:
+					backup_data.append(f.read())
+		
+		return backup_data
 	
 	
-        # Writes the file associated with backup_date to restore_file_location
+	# Writes the file associated with backup_date to restore_file_location
 	def retrieve_day(self, restore_location, retrieval_date):
-		retrieve_date = datetime.datetime.strptime(str(retrieval_date), "%d-%m-%Y")
+		retrieval_date = datetime.datetime.strptime(str(retrieval_date), "%d-%m-%Y")
 		backup_data = self.__get_data(retrieval_date)
 		day_data = reduce(xdelta3.decode, backup_data)
 		
 		# Write the days data to a temp file
 		temp_file = self.backup_location + "/temp"
 		with open(temp_file, "wb") as f:
-                	f.write(day_data)
+			f.write(day_data)
 
 		# Then uncompress it to restore_location
 		with tarfile.open(temp_file, "r:xz") as tar:
@@ -76,9 +77,9 @@ class Archive:
 		day_data = b""
 		with tarfile.open(temp_file, "x:xz") as tar:
 			for folder in backup_folders:
-                		tar.add(folder)
+				tar.add(folder)
 		with open(temp_file, "rb") as binary:
-        		day_data = binary.read()
+			day_data = binary.read()
 		os.remove(temp_file)
 
 		# Write to disk
@@ -95,4 +96,4 @@ class Archive:
 
 archive = Archive("/home/administrator/test_backup")
 archive.archive_day(["/home/administrator/Downloads"])
-archive.retrieve_day("/home/administrator/test_restore", "01-02-2017")
+archive.retrieve_day("/home/administrator/test_restore", "11-06-2017")
