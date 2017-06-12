@@ -85,7 +85,6 @@ class Archive:
 		else:
 			backup_data = self.__get_data(today)
 			last_day = reduce(xdelta3.decode, backup_data)
-			print(last_day)
 			with open(day_file, "wb") as f:
 				f.write(xdelta3.encode(last_day, day_data))
 
