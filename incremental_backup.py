@@ -41,7 +41,7 @@ class Archive:
 
 		# Read data from disk, including retrieval_date
 		day_index = (retrieval_date - self.creation_date).days
-		for day in range(0, day_index + 1):
+		for day in range(0, day_index):
 			day_file = self.backup_location + "/" + str(day)
 			if os.path.isfile(day_file):
 				with open(day_file, 'rb') as f:
