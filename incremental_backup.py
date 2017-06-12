@@ -31,14 +31,15 @@ class Archive:
 	# Returns an array of data from creation_date to retrieve_date
 	def __get_data(self, retrieve_date):
                 backup_data = []
+                print((retrieve_date - self.creation_date).days)
+                print(retrieve_date)
+                print(self.creation_date)
 
-                for day in range(0, (retrieve_date - self.creation_date).days):
-                        day_file = self.backup_location + "/" + day
+                for day in range(0, (retrieve_date - self.creation_date).days + 1):
+                        day_file = self.backup_location + "/" + str(day)
                         if os.path.isfile(day_file):
                                 with open(day_file, 'rb') as f:
                                         backup_data.append(f.read())
-                        else:
-                                backup_data.append(b'')
                 
                 return backup_data
 	
@@ -51,10 +52,7 @@ class Archive:
 			retrieve_date = self.creation_date
 		
 		backup_data = self.__get_data(retrieve_date)
-		if backup_data:
-			day_data = reduce(xdelta3.decode, backup_data)
-		else:
-			day_data = b''
+		day_data = reduce(xdelta3.decode, backup_data)
 		
 		# Write the days data to a temp file
 		temp_file = self.backup_location + "/temp"
@@ -90,6 +88,7 @@ class Archive:
 		else:
 			backup_data = self.__get_data(today)
 			last_day = reduce(xdelta3.decode, backup_data)
+			print(last_day)
 			with open(day_file, "wb") as f:
 				f.write(xdelta3.encode(last_day, day_data))
 
