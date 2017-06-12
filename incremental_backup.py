@@ -95,5 +95,5 @@ class Archive:
 
 archive = Archive("/home/administrator/test_backup")
 archive.archive_day(["/home/administrator/Downloads"])
-archive.retrieve_day("/home/administrator/test_restore", "11-08-2017")
+#archive.retrieve_day("/home/administrator/test_restore", "11-08-2017")
 
