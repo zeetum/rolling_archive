@@ -39,9 +39,9 @@ class Archive:
 		if retrieval_date < self.creation_date:
 			exit("Error: Date entered is before Creation Date")
 
-		# Read data from disk, including the retrieval_date
+		# Read data from disk 
 		day_index = (retrieval_date - self.creation_date).days
-		for day in range(0, day_index + 1):
+		for day in range(0, day_index):
 			day_file = self.backup_location + "/" + str(day)
 			if os.path.isfile(day_file):
 				with open(day_file, 'rb') as f:
@@ -84,6 +84,7 @@ class Archive:
 		# Write to disk
 		archive_day = today.day - self.creation_date.day
 		day_file = self.backup_location + "/" + str(archive_day)
+		print(archive_day)
 		if archive_day == 0:
 			with open(day_file, "wb") as f:
 				f.write(day_data)
@@ -96,4 +97,3 @@ class Archive:
 archive = Archive("/home/administrator/test_backup")
 archive.archive_day(["/home/administrator/Downloads"])
 #archive.retrieve_day("/home/administrator/test_restore", "11-08-2017")
-
