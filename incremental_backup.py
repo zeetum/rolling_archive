@@ -32,17 +32,15 @@ class Archive:
 	def __get_data(self, retrieval_date):
                 backup_data = []
 		
-		# Set ceiling
+		# Set floor and ceiling
 		today = datetime.datetime.fromtimestamp(time.time())
-		if retrieval_date => today:
+		if retrieval_date > today:
 			retrieval_date = today
-		
-		# Set floor
-		day_index = (retrieval_date - self.creation_date).days
-		if day_index < 0:
-			day_index = 0
-		
+		if retrieve_date < self.creation_date:
+			retrieve_date = self.creation_date
+
 		# Read data from disk
+		day_index = (retrieval_date - self.creation_date).days
                 for day in range(0, day_index + 1):
                         day_file = self.backup_location + "/" + str(day)
                         if os.path.isfile(day_file):
@@ -55,10 +53,6 @@ class Archive:
         # Writes the file associated with backup_date to restore_file_location
 	def retrieve_day(self, restore_location, retrieval_date):
 		retrieve_date = datetime.datetime.strptime(str(retrieval_date), "%d-%m-%Y")
-
-		if (retrieve_date < self.creation_date):
-			retrieve_date = self.creation_date
-		
 		backup_data = self.__get_data(retrieval_date)
 		day_data = reduce(xdelta3.decode, backup_data)
 		
