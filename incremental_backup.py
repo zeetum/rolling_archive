@@ -84,7 +84,6 @@ class Archive:
 		# Write to disk
 		archive_day = today.day - self.creation_date.day
 		day_file = self.backup_location + "/" + str(archive_day)
-		print(archive_day)
 		if archive_day == 0:
 			with open(day_file, "wb") as f:
 				f.write(day_data)
