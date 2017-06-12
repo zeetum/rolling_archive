@@ -31,9 +31,6 @@ class Archive:
 	# Returns an array of data from creation_date to retrieve_date
 	def __get_data(self, retrieve_date):
                 backup_data = []
-                print((retrieve_date - self.creation_date).days)
-                print(retrieve_date)
-                print(self.creation_date)
 
                 for day in range(0, (retrieve_date - self.creation_date).days + 1):
                         day_file = self.backup_location + "/" + str(day)
