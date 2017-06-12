@@ -39,7 +39,7 @@ class Archive:
 		if retrieval_date < self.creation_date:
 			exit("Error: Date entered is before Creation Date")
 
-		# Read data from disk
+		# Read data from disk, including the retrieval_date
 		day_index = (retrieval_date - self.creation_date).days
 		for day in range(0, day_index + 1):
 			day_file = self.backup_location + "/" + str(day)
