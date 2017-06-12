@@ -29,10 +29,21 @@ class Archive:
 
 
 	# Returns an array of data from creation_date to retrieve_date
-	def __get_data(self, retrieve_date):
+	def __get_data(self, retrieval_date):
                 backup_data = []
-
-                for day in range(0, (retrieve_date - self.creation_date).days + 1):
+		
+		# Set ceiling
+		today = datetime.datetime.fromtimestamp(time.time())
+		if retrieval_date => today:
+			retrieval_date = today
+		
+		# Set floor
+		day_index = (retrieval_date - self.creation_date).days
+		if day_index < 0:
+			day_index = 0
+		
+		# Read data from disk
+                for day in range(0, day_index + 1):
                         day_file = self.backup_location + "/" + str(day)
                         if os.path.isfile(day_file):
                                 with open(day_file, 'rb') as f:
