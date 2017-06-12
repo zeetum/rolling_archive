@@ -35,13 +35,12 @@ class Archive:
 		# Set floor and ceiling
 		today = datetime.datetime.fromtimestamp(time.time())
 		if retrieval_date > today:
-			retrieval_date = today
+			exit("Error: Date entered is after Today")
 		if retrieval_date < self.creation_date:
-			retrieval_date = self.creation_date
+			exit("Error: Date entered is before Creation Date")
 
 		# Read data from disk
 		day_index = (retrieval_date - self.creation_date).days
-		print(day_index)
 		for day in range(0, day_index + 1):
 			day_file = self.backup_location + "/" + str(day)
 			if os.path.isfile(day_file):
@@ -96,4 +95,5 @@ class Archive:
 
 archive = Archive("/home/administrator/test_backup")
 archive.archive_day(["/home/administrator/Downloads"])
-archive.retrieve_day("/home/administrator/test_restore", "11-06-2017")
+archive.retrieve_day("/home/administrator/test_restore", "11-08-2017")
+
