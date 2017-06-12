@@ -42,13 +42,13 @@ class Archive:
 	
 	
         # Writes the file associated with backup_date to restore_file_location
-	def retrieve_day(self, restore_location, retrieve_date):
-		retrieve_date = datetime.datetime.strptime(str(retrieve_date), "%d-%m-%Y")
+	def retrieve_day(self, restore_location, retrieval_date):
+		retrieve_date = datetime.datetime.strptime(str(retrieval_date), "%d-%m-%Y")
 
 		if (retrieve_date < self.creation_date):
 			retrieve_date = self.creation_date
 		
-		backup_data = self.__get_data(retrieve_date)
+		backup_data = self.__get_data(retrieval_date)
 		day_data = reduce(xdelta3.decode, backup_data)
 		
 		# Write the days data to a temp file
