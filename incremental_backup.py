@@ -29,6 +29,8 @@ class Archive:
 
 
 	# Returns an array of data from creation_date to retrieve_date
+	# Note: if a day is missing, it is skipped. This could cause inconsistancies
+	#       with the produced delta
 	def __get_data(self, retrieval_date):
 		backup_data = []
 		
