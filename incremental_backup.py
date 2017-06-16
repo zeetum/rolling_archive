@@ -12,8 +12,8 @@ class Archive:
 
 	def __init__(self, backup_location):
 		self.backup_location = backup_location
-		if os.path.exists(self.backup_location + "/temp"):
-			os.remove(self.backup_location + "/temp")
+		if os.path.exists(backup_location + "/temp"):
+			os.remove(backup_location + "/temp")
 		
 		if not os.path.exists(backup_location):
 			os.makedirs(backup_location)
