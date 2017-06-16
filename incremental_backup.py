@@ -23,7 +23,7 @@ class Archive:
 				self.creation_date = datetime.datetime.strptime(time_file.read(), "%Y-%m-%d")
 		else:
 			with open(backup_location + "/creation_date", "w") as time_file:
-				self.creation_date = datetime.datetime.fromtimestamp(time.time()).strftime("%Y-%m-%d")
+				self.creation_date = datetime.datetime.now().strftime("%Y-%m-%d")
 				time_file.write(self.creation_date)
 
 
