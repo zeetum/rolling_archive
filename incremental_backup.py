@@ -69,8 +69,8 @@ class Archive:
 		
 	# Writes the backup_folders to the current day
 	def archive_day(self, backup_folders):
-		today = datetime.datetime.fromtimestamp(time.time())
-		yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+		today = datetime.datetime.now()
+		yesterday = today - datetime.timedelta(days=1)
 		archive_day = today.day - self.creation_date.day
 
 		# Tar backup_folders togeather
