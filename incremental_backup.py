@@ -1,6 +1,5 @@
 from functools import reduce
 import datetime
-import time
 import os
 import tarfile
 import xdelta3
@@ -33,7 +32,7 @@ class Archive:
 		backup_data = []
 		
 		# Set floor and ceiling
-		today = datetime.datetime.fromtimestamp(time.time())
+		today = datetime.datetime.now()
 		if retrieval_date > today:
 			exit("Error: Date entered is after Today")
 		if retrieval_date < self.creation_date:
