@@ -29,8 +29,6 @@ class Archive:
 
 
 	# Returns an array of data from creation_date to retrieve_date
-	# Note: if a day is missing, it is skipped. This could cause inconsistancies
-	#       with the produced delta
 	def __get_data(self, retrieval_date):
 		backup_data = []
 		
@@ -41,9 +39,9 @@ class Archive:
 		if retrieval_date < self.creation_date:
 			exit("Error: Date entered is before Creation Date")
 
-		# Read data from disk
+		# Read data from disk 
 		day_index = (retrieval_date - self.creation_date).days
-		for day in range(0, day_index):
+		for day in range(0, day_index + 1):
 			day_file = self.backup_location + "/" + str(day)
 			if os.path.isfile(day_file):
 				with open(day_file, 'rb') as f:
@@ -72,6 +70,8 @@ class Archive:
 	# Writes the backup_folders to the current day
 	def archive_day(self, backup_folders):
 		today = datetime.datetime.fromtimestamp(time.time())
+		yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+		archive_day = today.day - self.creation_date.day
 
 		# Tar backup_folders togeather
 		temp_file = self.backup_location + "/temp"
@@ -84,17 +84,16 @@ class Archive:
 		os.remove(temp_file)
 
 		# Write to disk
-		archive_day = today.day - self.creation_date.day
 		day_file = self.backup_location + "/" + str(archive_day)
 		if archive_day == 0:
 			with open(day_file, "wb") as f:
 				f.write(day_data)
 		else:
-			backup_data = self.__get_data(today)
+			backup_data = self.__get_data(yesterday)
 			last_day = reduce(xdelta3.decode, backup_data)
 			with open(day_file, "wb") as f:
 				f.write(xdelta3.encode(last_day, day_data))
 
 archive = Archive("/home/administrator/test_backup")
 archive.archive_day(["/home/administrator/Downloads"])
-#archive.retrieve_day("/home/administrator/test_restore", "11-08-2017")
+archive.retrieve_day("/home/administrator/test_restore", "16-06-2017")
