@@ -4,6 +4,7 @@ import os
 import tarfile
 import xdelta3
 
+# Preformance warning: I use the disk to buffer binary data for tarballs
 class Archive:
 
 	backup_location = ""
@@ -72,7 +73,7 @@ class Archive:
 		yesterday = today - datetime.timedelta(days=1)
 		archive_day = today.day - self.creation_date.day
 
-		# Tar backup_folders togeather - Unfortunatly I use the disk as a buffer :(
+		# Tar backup_folders togeather
 		temp_file = self.backup_location + "/temp"
 		day_data = b""
 		with tarfile.open(temp_file, "x:xz") as tar:
