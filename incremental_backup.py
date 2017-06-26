@@ -6,7 +6,6 @@ import os
 import tarfile
 import xdelta3
 
-# Preformance warning: I use the disk to buffer binary data for tarballs
 class Archive:
 
 	backup_location = ""
@@ -14,8 +13,8 @@ class Archive:
 
 	def __init__(self, backup_location):
 		self.backup_location = backup_location
-		if os.path.exists(backup_location + "/temp"):
-			os.remove(backup_location + "/temp")
+		if os.path.exists(self.backup_location + "/temp"):
+			os.remove(self.backup_location + "/temp")
 		
 		if not os.path.exists(backup_location):
 			os.makedirs(backup_location)
@@ -35,7 +34,7 @@ class Archive:
 		backup_data = []
 		
 		# Set floor and ceiling
-		today = datetime.datetime.now()
+		today =  datetime.datetime.now()
 		if retrieval_date > today:
 			exit("Error: Date entered is after Today")
 		if retrieval_date < self.creation_date:
@@ -98,4 +97,4 @@ class Archive:
 
 archive = Archive("/home/administrator/test_backup")
 archive.archive_day(["/home/administrator/Downloads"])
-archive.retrieve_day("/home/administrator/test_restore", "16-06-2017")
+#archive.retrieve_day("/home/administrator/test_restore", "25-06-2017")
