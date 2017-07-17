@@ -67,32 +67,35 @@ class Archive:
 		os.remove(temp_file)
 		
 		
-	# Writes the backup_folders to the current day
-	def archive_day(self, backup_folders):
-		today = datetime.datetime.now()
-		yesterday = today - datetime.timedelta(days=1)
-		archive_day = today - self.creation_date
+        # Writes the backup_folders to the current day
+        def archive_day(self, backup_folders):
+                today = datetime.datetime.now()
+                yesterday = today - datetime.timedelta(days=1)
+                archive_day = (today - self.creation_date).days
 
-		# Tar backup_folders togeather
-		temp_file = self.backup_location + "/temp"
-		day_data = b""
-		with tarfile.open(temp_file, "x:xz") as tar:
-			for folder in backup_folders:
-				tar.add(folder)
-		with open(temp_file, "rb") as binary:
-			day_data = binary.read()
-		os.remove(temp_file)
+                # Tar backup_folders togeather
+                temp_file = self.backup_location + "/temp"
+                day_data = b""
+                with tarfile.open(temp_file, "x:xz") as tar:
+                        for folder in backup_folders:
+                                tar.add(folder)
+                with open(temp_file, "rb") as binary:
+                        day_data = binary.read()
+                os.remove(temp_file)
 
-		# Write to disk
-		day_file = self.backup_location + "/" + str(archive_day.days)
-		if archive_day == 0:
-			with open(day_file, "wb") as f:
-				f.write(day_data)
-		else:
-			backup_data = self.__get_data(yesterday)
-			last_day = reduce(xdelta3.decode, backup_data)
-			with open(day_file, "wb") as f:
-				f.write(xdelta3.encode(last_day, day_data))
+                print(archive_day)
+
+                # Write to disk
+                day_file = self.backup_location + "/" + str(archive_day)
+                if archive_day == 0:
+                        with open(day_file, "wb") as f:
+                                f.write(day_data)
+                else:
+                        backup_data = self.__get_data(yesterday)
+                        last_day = reduce(xdelta3.decode, backup_data)
+                        with open(day_file, "wb") as f:
+                                f.write(xdelta3.encode(last_day, day_data))
+
 
 archive = Archive("/home/administrator/test_backup")
 archive.archive_day(["/home/administrator/Downloads"])
