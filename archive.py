@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# a change
+
 from functools import reduce
 import datetime
 import os
