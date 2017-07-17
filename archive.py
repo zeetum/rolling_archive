@@ -47,26 +47,26 @@ class Archive:
 				with open(day_file, 'rb') as f:
 					backup_data.append(f.read())
 		
-		return backup_data
-	
-	
-	# Writes the file associated with backup_date to restore_file_location
-	def retrieve_day(self, restore_location, retrieval_date):
-		retrieval_date = datetime.datetime.strptime(str(retrieval_date), "%d-%m-%Y")
-		backup_data = self.__get_data(retrieval_date)
-		day_data = reduce(xdelta3.decode, backup_data)
-		
-		# Write the days data to a temp file
-		temp_file = self.backup_location + "/temp"
-		with open(temp_file, "wb") as f:
-			f.write(day_data)
+                day_data = reduce(xdelta3.decode, backup_data)
+                return day_data
 
-		# Then uncompress it to restore_location
-		with tarfile.open(temp_file, "r:xz") as tar:
-			tar.extractall(path=restore_location)
-		os.remove(temp_file)
-		
-		
+
+        # Writes the file associated with backup_date to restore_file_location
+        def retrieve_day(self, restore_location, retrieval_date):
+                retrieval_date = datetime.datetime.strptime(str(retrieval_date), "%d-%m-%Y")
+                day_data = self.__get_data(retrieval_date)
+
+                # Write the days data to a temp file
+                temp_file = self.backup_location + "/temp"
+                with open(temp_file, "wb") as f:
+                        f.write(day_data)
+
+                # Then uncompress it to restore_location
+                with tarfile.open(temp_file, "r:xz") as tar:
+                        tar.extractall(path=restore_location)
+                os.remove(temp_file)
+
+
         # Writes the backup_folders to the current day
         def archive_day(self, backup_folders):
                 today = datetime.datetime.now()
@@ -91,8 +91,7 @@ class Archive:
                         with open(day_file, "wb") as f:
                                 f.write(day_data)
                 else:
-                        backup_data = self.__get_data(yesterday)
-                        last_day = reduce(xdelta3.decode, backup_data)
+                        last_day = self.__get_data(yesterday)
                         with open(day_file, "wb") as f:
                                 f.write(xdelta3.encode(last_day, day_data))
 
