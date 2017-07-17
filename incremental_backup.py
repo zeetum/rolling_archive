@@ -71,7 +71,7 @@ class Archive:
 	def archive_day(self, backup_folders):
 		today = datetime.datetime.now()
 		yesterday = today - datetime.timedelta(days=1)
-		archive_day = today.day - self.creation_date.day
+		archive_day = today - self.creation_date
 
 		# Tar backup_folders togeather
 		temp_file = self.backup_location + "/temp"
@@ -84,7 +84,7 @@ class Archive:
 		os.remove(temp_file)
 
 		# Write to disk
-		day_file = self.backup_location + "/" + str(archive_day)
+		day_file = self.backup_location + "/" + str(archive_day.days)
 		if archive_day == 0:
 			with open(day_file, "wb") as f:
 				f.write(day_data)
