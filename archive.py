@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+#default editor = vim
+
 from functools import reduce
 import datetime
 import os
