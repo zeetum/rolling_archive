@@ -83,8 +83,6 @@ class Archive:
                         day_data = binary.read()
                 os.remove(temp_file)
 
-                print(archive_day)
-
                 # Write to disk
                 day_file = self.backup_location + "/" + str(archive_day)
                 if archive_day == 0:
