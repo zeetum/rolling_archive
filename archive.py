@@ -55,7 +55,7 @@ class Archive:
 
         # Writes the file associated with backup_date to restore_file_location
         def retrieve_day(self, restore_location, retrieval_date):
-                retrieval_date = datetime.datetime.strptime(str(retrieval_date), "%d-%m-%Y")
+                retrieval_date = datetime.datetime.strptime(retrieval_date, "%d-%m-%Y")
                 day_data = self.__get_data(retrieval_date)
 
                 # Write the days data to a temp file
