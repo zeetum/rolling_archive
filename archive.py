@@ -31,7 +31,7 @@ class Archive:
                                 time_file.write(self.creation_date.strftime("%Y-%m-%d"))
 
 
-	# Returns an array of data from creation_date to retrieve_date
+	# Returns a binary string of the day's data
 	def __get_data(self, retrieval_date):
 		backup_data = []
 		
