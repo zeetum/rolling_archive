@@ -21,7 +21,6 @@ class Archive:
 		if os.path.exists(self.backup_location + "/temp"):
 			os.remove(self.backup_location + "/temp")
 		
-
                 if os.path.exists(backup_location + "/creation_date"):
                         with open(backup_location + "/creation_date") as time_file:
                                 self.creation_date = datetime.datetime.strptime(time_file.read(), "%Y-%m-%d")
