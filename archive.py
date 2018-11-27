@@ -64,7 +64,7 @@ class Archive:
                         f.write(day_data)
 
                 # Then uncompress it to restore_location
-                with tarfile.open(temp_file, "r:xz") as tar:
+                with tarfile.open(temp_file, "r") as tar:
                         tar.extractall(path=restore_location)
                 os.remove(temp_file)
 
@@ -78,7 +78,7 @@ class Archive:
                 # Tar backup_folders togeather
                 temp_file = self.backup_location + "/temp"
                 day_data = b""
-                with tarfile.open(temp_file, "x:xz") as tar:
+                with tarfile.open(temp_file, "w") as tar:
                         for folder in backup_folders:
                                 tar.add(folder)
                 with open(temp_file, "rb") as binary:
@@ -96,6 +96,6 @@ class Archive:
                                 f.write(xdelta3.encode(last_day, day_data))
 
 
-archive = Archive("/home/administrator/test_backup")
-archive.archive_day(["/home/administrator/Downloads"])
+archive = Archive("/rolling_archive")
+archive.archive_day(["/backup"])
 #archive.retrieve_day("/home/administrator/test_restore", "25-06-2017")
