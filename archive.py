@@ -81,7 +81,7 @@ class Archive:
 		day_data = b""
 		with tarfile.open(temp_file, "w") as tar:
 		    for folder in backup_folders:
-						tar.add(folder)
+	                tar.add(folder)
 		with open(temp_file, "rb") as binary:
 		    day_data = binary.read()
 		os.remove(temp_file)
